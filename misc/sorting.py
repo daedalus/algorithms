@@ -2,7 +2,7 @@
 # All implementations are based on the respective wikipedia articles.
 
 
-def bubblesort(arr):
+def bubble_sort(arr):
   n = len(arr)
   for i in range(0, n-1):
     for j in range(0, n-i-1):
@@ -27,14 +27,14 @@ def merge(left,right):
   return result
 
 
-def mergesort(arr):
+def merge_sort(arr):
   n = len(arr)
   if n <= 1: return arr
   middle = n >> 1
   left = [arr[x] for x in range(0, middle)]
   right = [arr[x] for x in range(middle, n)]
-  left = mergesort(left)
-  right = mergesort(right)
+  left = merge_sort(left)
+  right = merge_sort(right)
   if left[-1] <= right[0]:
     return left + right
   return merge(left, right)
@@ -51,19 +51,19 @@ def partition(arr, lo, hi):
   return i
 
 
-def _quicksort(arr, lo, hi):
+def _quick_sort(arr, lo, hi):
   if lo >= hi or lo < 0: return
   p = partition(arr, lo, hi)
-  _quicksort(arr, lo, p - 1)
-  _quicksort(arr, p + 1, hi)
+  _quick_sort(arr, lo, p - 1)
+  _quick_sort(arr, p + 1, hi)
 
   
-def quicksort(arr):
-  _quicksort(arr, 0, len(arr) - 1)
+def quick_sort(arr):
+  _quick_sort(arr, 0, len(arr) - 1)
   return arr
 
 
-def insertionsort(arr):
+def insertion_sort(arr):
   i = 1
   while i < len(arr):
     j=i
@@ -77,7 +77,7 @@ def insertionsort(arr):
 def main():
   arr = [4,1,3,6,8,5,2,9,7,0]
   s = sorted(arr)
-  for f in [bubblesort, mergesort, quicksort, insertionsort]:
+  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort]:
     print(f.__name__, "OK")
     assert f(arr) == s
 
