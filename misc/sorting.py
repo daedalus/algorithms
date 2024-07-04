@@ -90,12 +90,27 @@ def bitonic_sort(arr):
   return arr
 
 
+def odd_even_sort(arr):
+  sorted = False
+  while not sorted:
+    sorted = True
+    for i in range(1, len(arr)-1, 2):
+      if arr[i] > arr[i+1]:
+        arr[i],arr[i+1] = arr[i+1],arr[i]
+        sorted = False
+    for i in range(0, len(arr)-1, 2):
+      if arr[i] > arr[i+1]:
+        arr[i],arr[i+1] = arr[i+1],arr[i]
+        sorted = False
+  return arr
+
+
 def main():
   arr = [4,1,3,6,8,5,2,9,7,0,15,13,14,10,12,11]
 
 
   s = sorted(arr)
-  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort, bitonic_sort]:
+  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort, bitonic_sort, odd_even_sort]:
     assert f(arr) == s
     print(f.__name__, "OK")
 
