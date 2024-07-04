@@ -73,12 +73,31 @@ def insertion_sort(arr):
     i+=1
   return arr
 
- 
+
+def bitonic_sort(arr):
+  n,k = len(arr), 2
+  while k <= n:
+    j = k >> 1
+    while j > 0:
+      for i in range(0, n):
+        if (l:=(i^j)) > i:
+          if ( (i & k) == 0 ) and ( arr[i] > arr[l] ):
+             arr[i], arr[l] = arr[l], arr[i]
+          if ( (i & k) != 0 ) and ( arr[i] < arr[l] ):
+             arr[i], arr[l] = arr[l], arr[i]
+      j >>= 1
+    k <<= 1
+  return arr
+
+
 def main():
-  arr = [4,1,3,6,8,5,2,9,7,0]
+  arr = [4,1,3,6,8,5,2,9,7,0,15,13,14,10,12,11]
+
+
   s = sorted(arr)
-  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort]:
-    print(f.__name__, "OK")
+  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort, bitonic_sort]:
     assert f(arr) == s
+    print(f.__name__, "OK")
+
 
 if __name__ == "__main__": main()
