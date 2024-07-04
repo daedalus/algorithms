@@ -20,10 +20,13 @@ def merge(left,right):
     else:
       result.append(right[0])
       right = right[1:]
-  if len(left) > 0:
-    result += left[1:]
-  if len(right) > 0:
-    result += right[1:]
+   
+  while len(left) > 0:
+    result.append(left[0])
+    left = left[1:]
+  while len(right) > 0:
+    result.append(right[0])
+    right = right[1:] 
   return result
 
 
@@ -41,10 +44,10 @@ def merge_sort(arr):
 
 
 def partition(arr, lo, hi):
-  pivot = arr[lo]
+  pivot = arr[hi]
   i = lo
   for j in range(lo, hi):
-    if arr[j] >= pivot:
+    if arr[j] <= pivot:
       arr[i], arr[j] = arr[j], arr[i]
       i += 1
   arr[hi], arr[i] = arr[i],arr[hi]
@@ -106,13 +109,14 @@ def odd_even_sort(arr):
 
 
 def main():
-  arr = [4,1,3,6,8,5,2,9,7,0,15,13,14,10,12,11]
 
-
-  s = sorted(arr)
   for f in [bubble_sort, merge_sort, quick_sort, insertion_sort, bitonic_sort, odd_even_sort]:
-    assert f(arr) == s
-    print(f.__name__, "OK")
-
+    arr = [4,1,3,6,8,5,2,9,7,0,15,13,14,10,12,11]
+    s = sorted(arr)
+    r = f(arr) 
+    if r == s:
+      print(f.__name__, "OK")
+    else:
+      print(f.__name__, "FAIL")
 
 if __name__ == "__main__": main()
