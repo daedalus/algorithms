@@ -93,6 +93,22 @@ def bitonic_sort(arr):
   return arr
 
 
+bittest = lambda n, p:(n & (1 << p)) != 0
+def bitonic_sort2(arr):
+  ts = 0
+  n=len(arr)
+  for i in range(n):
+    for k in range(1, n.bit_length()):
+      for j in range(k):
+        if not bittest(i, j):
+          l=(i^j)
+          if ((i & k) == 0) and (arr[i] > arr[l]):
+            arr[i], arr[l] = arr[l], arr[i]
+          if ((i & k) != 0) and (arr[i] < arr[l]):
+            arr[i], arr[l] = arr[l], arr[i]
+  return arr
+
+
 def odd_even_sort(arr):
   sorted = False
   while not sorted:
@@ -110,7 +126,7 @@ def odd_even_sort(arr):
 
 def main():
 
-  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort, bitonic_sort, odd_even_sort]:
+  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort, bitonic_sort, bitonic_sort2, odd_even_sort]:
     arr = [4,1,3,6,8,5,2,9,7,0,15,13,14,10,12,11]
     s = sorted(arr)
     r = f(arr) 
