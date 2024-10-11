@@ -1,9 +1,10 @@
 def dynamic_sliding_window(arr, x):
-    min_length = len(arr)
+    n = len(arr)
+    min_length = n
     start = 0
     end = 0
     current_sum = 0
-    while end < min_length:
+    while end < n:
         current_sum += arr[end]
         end += 1
         while start < end and current_sum >= x:
