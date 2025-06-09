@@ -1,7 +1,36 @@
 # Author: Dario Clavijo 2024.
 # All implementations are based on the respective wikipedia articles.
 
+def _meansort(k, m, n, mean):
+    if m < n:
+        left_sum,right_sum,i,j = 0,0,m,n
 
+        while True:
+            while k[i] < mean and i != j:
+                left_sum += k[i]
+                i += 1
+            while k[j] >= mean and i != j:
+                right_sum += k[j]
+                j -= 1
+            if i != j:
+                k[i], k[j] = k[j], k[i]
+            else:
+                break
+
+        if i == m: return
+
+        right_sum += k[j]
+
+        if (im := i - m) > 0:
+            pmean = left_sum // im
+            meansort(k, m, i - 1, pmean)
+ 
+        if (nj1 := n - j + 1) > 0:
+            pmean = right_sum // nj1
+            meansort(k, j, n, pmean)
+          
+meansort = lambda lst: _meansort(lst, 0, len(lst) - 1, sum(lst)/len(lst))
+  
 def bubble_sort(arr):
   n = len(arr)
   for i in range(0, n-1):
@@ -126,7 +155,7 @@ def odd_even_sort(arr):
 
 def main():
 
-  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort, bitonic_sort, bitonic_sort2, odd_even_sort]:
+  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort, bitonic_sort, bitonic_sort2, odd_even_sort, meansort]:
     arr = [4,1,3,6,8,5,2,9,7,0,15,13,14,10,12,11]
     s = sorted(arr)
     r = f(arr) 
