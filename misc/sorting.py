@@ -170,7 +170,7 @@ def odd_even_sort(arr):
 
 def main():
 
-  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort, bitonic_sort, bitonic_sort2, odd_even_sort, meansort]:
+  for f in [bubble_sort, merge_sort, quick_sort, insertion_sort, bitonic_sort, bitonic_sort2, odd_even_sort, meansort, slowsort]:
     arr = [4,1,3,6,8,5,2,9,7,0,15,13,14,10,12,11]
     s = sorted(arr)
     r = f(arr) 
