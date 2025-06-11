@@ -28,9 +28,24 @@ def _meansort(k, m, n, mean):
         if (nj1 := n - j + 1) > 0:
             pmean = right_sum // nj1
             meansort(k, j, n, pmean)
-          
+            
 meansort = lambda lst: _meansort(lst, 0, len(lst) - 1, sum(lst)/len(lst))
-  
+
+
+def _slowsort(lst, i, j):
+    if i >= j: return
+    m = int((i+j) / 2)
+    _slowsort(lst, i, m)
+    _slowsort(lst, m+1, j)
+    if lst[j] < lst[m]:
+        lst[j], lst[m] = lst[m], lst[j]
+    _slowsort(lst, i, j-1)
+
+def slowsort(lst):
+    _slowsort(lst,0,len(lst))
+    return lst
+
+
 def bubble_sort(arr):
   n = len(arr)
   for i in range(0, n-1):
