@@ -1,5 +1,8 @@
 from sympy import divisors, isprime
 def invphi(n):
+    """
+    Find all x such that phi(n) = x where phi is the Eluler's totient function.
+    """
     if n == 1: return [1, 2]
     primes, prime_powers = [x for d in divisors(n) if isprime(x:=(d + 1))], []
     for p in primes:
