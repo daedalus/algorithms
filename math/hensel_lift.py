@@ -1,52 +1,64 @@
 def poly_eval(poly, x):
-    """Evaluate polynomial given by list of coefficients at x"""
+    """Evaluate polynomial at x using Horner's method."""
     result = 0
     for coeff in reversed(poly):
         result = result * x + coeff
     return result
 
+
 def poly_derivative(poly):
-    """Return the derivative of a polynomial given as list of coefficients"""
+    """Compute derivative coefficients of polynomial."""
     return [i * poly[i] for i in range(1, len(poly))]
 
-def hensel_lift_numeric(poly, a, p, k):
+
+def hensel_lift(poly, root, p, k):
     """
-    Lift root `a` of f(x) ≡ 0 mod p to a root modulo p^k using Hensel's lemma.
-    
-    Parameters:
-        poly: list of integer coefficients [a0, a1, ..., an] representing a0 + a1*x + ... + an*x^n
-        p: prime number
-        a: initial root mod p
-        k: target power of p to lift to
-    
+    Lift a root of f(x) ≡ 0 (mod p) to a root modulo p^k via Hensel's lemma.
+
+    Args:
+        poly: list of ints, coefficients [a0, a1, ..., an] for f(x)
+        root: initial solution mod p
+        p: prime modulus
+        k: exponent for target modulus p^k
+
     Returns:
-        The lifted root mod p^k
+        int: lifted root modulo p^k
     """
-    root = a
+    # Validate initial root
+    if poly_eval(poly, root) % p != 0:
+        raise ValueError(f"{root} is not a root mod {p}")
+
     deriv = poly_derivative(poly)
-    p_i = 1
+    modulus = p
+    current_root = root
 
-    for i in range(1, k):
-        p_i *= p
-        f_val = poly_eval(poly, root)
-        f_der = poly_eval(deriv, root)
+    for exp in range(1, k):
+        # Evaluate f and f' at current root
+        f_val = poly_eval(poly, current_root)
+        f_der = poly_eval(deriv, current_root)
+
         if f_der % p == 0:
-            raise ValueError("Derivative zero mod p, Hensel's lemma does not apply")
+            raise ValueError("f'(root) ≡ 0 mod p; Hensel lifting fails")
 
-        # Solve: f(a) + f'(a) * t * p^i ≡ 0 mod p^{i+1}
-        # Let t = -f(a)/p^i * (f'(a)^{-1} mod p)
-        
-        t = (-f_val // p_i) % p
-        t = (t * pow(f_der, -1, p)) % p
-        root += (t * p_i) 
-    
-    return root % (p_i*p)
+        # Compute correction term t
+        # f_val + f_der * t * p^exp ≡ 0 (mod p^(exp+1))
+        delta = (-f_val // modulus) % p
+        inv_der = pow(f_der, -1, p)
+        t = (delta * inv_der) % p
 
-f = [-2, 0, 1]
-p = 7
-a = 3 
-k = 2
+        # Update root and modulus
+        current_root += t * modulus
+        modulus *= p
 
-root = hensel_lift_numeric(f, a, p, k)
-print(f"Lifted root mod {p**k} is", root)
-print("f(root) mod p^k =", poly_eval(f, root) % (p ** k))
+    return current_root % modulus
+
+
+if __name__ == '__main__':
+    # Example: f(x) = x^2 - 2, root mod 7 is 3, lift to mod 49
+    f = [-2, 0, 1]
+    p = 7
+    a = 3
+    k = 2
+    r = hensel_lift(f, a, p, k)
+    print(f"Lifted root mod {p**k} is {r}")
+    print("Verification:", poly_eval(f, r) % (p**k) == 0)
